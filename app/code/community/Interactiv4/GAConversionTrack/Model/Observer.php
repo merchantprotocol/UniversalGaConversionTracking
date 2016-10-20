@@ -56,7 +56,14 @@ class Interactiv4_GAConversionTrack_Model_Observer
                 Mage::helper('core')->jsQuoteEscape(Mage::helper('core')->escapeHtml($address->getCountry()))
             );
 
+            $qty = 0;$
+            $isRFQS = false;
             foreach ($order->getAllVisibleItems() as $item) {
+            	if ($item->getSku()!=='RF_QS') {
+            		continue;
+            	}
+            	$isRFQS = true;
+            	
                 $ga_tracking->addItem(
                     $order->getIncrementId(),
                     Mage::helper('core')->jsQuoteEscape($item->getSku()),
@@ -64,18 +71,23 @@ class Interactiv4_GAConversionTrack_Model_Observer
                     $item->getQtyOrdered(),
                     Mage::helper('core')->jsQuoteEscape($item->getName())
                 );
+                $qty += $item->getQtyOrdered();
             }
-
+			
             $order->setData('i4gaconversiontrack_tracked', 1);
-
-            $comment = "GA Conversion Track OK"
-                . "<br />GA Code: " . $googleAnalyticsAccountId
-                . "<br />Domain: " . $domain
-                . "<br />Order #: " . $order->getIncrementId()
-                . "<br />Amount: " . Mage::app()->getLocale()->currency($order->getOrderCurrencyCode())->toCurrency($order->getBaseGrandTotal());
-            $order->addStatusHistoryComment($comment);
-
-            $order->save();
+            
+            if ($isRFQS)
+            {
+	            $comment = "GA Conversion Track OK"
+	                . "<br />GA Code: " . $googleAnalyticsAccountId
+	                . "<br />Domain: " . $domain
+	                . "<br />Order #: " . $order->getIncrementId()
+	                . "<br />Qty #: " . $qty
+	                . "<br />Amount: " . Mage::app()->getLocale()->currency($order->getOrderCurrencyCode())->toCurrency($order->getBaseGrandTotal());
+	            $order->addStatusHistoryComment($comment);
+	
+	            $order->save();
+            }
         }
     }
 

@@ -133,7 +133,11 @@ class Interactiv4_GAConversionTrack_Model_Tracking extends Varien_Object
             'utmipn'    => $name,
             'utmiva'    => $category,
             'utmipr'    => $price,
+        		
+            'utmiq'     => $quantity,
             'utmiqt'    => $quantity,
+            'utmqt'    => $quantity,
+        		
             'utmr'      => $this->getData('utmr'),
             'utmip'     => $this->getData('utmip')
         );
