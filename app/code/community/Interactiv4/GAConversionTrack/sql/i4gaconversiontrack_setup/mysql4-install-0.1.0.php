@@ -8,6 +8,7 @@
  */
 $this->startSetup();
 
+try {
 $this->addAttribute('order', 'i4gaconversiontrack_tracked', array('type' => 'int'));
-
+} catch(Exception $e){}
 $this->endSetup();
