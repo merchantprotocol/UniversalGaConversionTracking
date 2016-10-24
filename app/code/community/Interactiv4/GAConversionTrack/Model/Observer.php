@@ -26,8 +26,23 @@ class Interactiv4_GAConversionTrack_Model_Observer
             }
             if (!$pass) return;
             $store = Mage::app()->getStore($order->getStoreId());
-            $googleAnalyticsAccountId = Mage::helper('i4gaconversiontrack')->getGoogleAnalyticsAccountId($order->getStoreId());
             $domain = parse_url($store->getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB), PHP_URL_HOST);
+
+            $qty = 0;
+            $isRFQS = false;
+            foreach ($order->getAllVisibleItems() as $item) {
+            	if ($item->getSku()!=='RF_QS') {
+            		continue;
+            	}
+            	$isRFQS = true;
+            }
+            if (!$isRFQS) {
+            	$order->setData('i4gaconversiontrack_tracked', 1);
+            	$order->save();
+            	return;
+            }
+            
+            $googleAnalyticsAccountId = Mage::helper('i4gaconversiontrack')->getGoogleAnalyticsAccountId($order->getStoreId());
             $trackData =  $this->addTrackingDataToOrder($order);
             $ga_tracking = new Interactiv4_GAConversionTrack_Model_Tracking(
                 $googleAnalyticsAccountId,
@@ -56,14 +71,8 @@ class Interactiv4_GAConversionTrack_Model_Observer
                 Mage::helper('core')->jsQuoteEscape(Mage::helper('core')->escapeHtml($address->getCountry()))
             );
 
-            $qty = 0;$
-            $isRFQS = false;
+            $qty = 0;
             foreach ($order->getAllVisibleItems() as $item) {
-            	if ($item->getSku()!=='RF_QS') {
-            		continue;
-            	}
-            	$isRFQS = true;
-            	
                 $ga_tracking->addItem(
                     $order->getIncrementId(),
                     Mage::helper('core')->jsQuoteEscape($item->getSku()),
@@ -76,18 +85,15 @@ class Interactiv4_GAConversionTrack_Model_Observer
 			
             $order->setData('i4gaconversiontrack_tracked', 1);
             
-            if ($isRFQS)
-            {
-	            $comment = "GA Conversion Track OK"
-	                . "<br />GA Code: " . $googleAnalyticsAccountId
-	                . "<br />Domain: " . $domain
-	                . "<br />Order #: " . $order->getIncrementId()
-	                . "<br />Qty #: " . $qty
-	                . "<br />Amount: " . Mage::app()->getLocale()->currency($order->getOrderCurrencyCode())->toCurrency($order->getBaseGrandTotal());
-	            $order->addStatusHistoryComment($comment);
-	
-	            $order->save();
-            }
+            $comment = "GA Conversion Track OK"
+                . "<br />GA Code: " . $googleAnalyticsAccountId
+                . "<br />Domain: " . $domain
+                . "<br />Order #: " . $order->getIncrementId()
+                . "<br />Qty #: " . $qty
+                . "<br />Amount: " . Mage::app()->getLocale()->currency($order->getOrderCurrencyCode())->toCurrency($order->getBaseGrandTotal());
+            $order->addStatusHistoryComment($comment);
+
+            $order->save();
         }
     }
 
