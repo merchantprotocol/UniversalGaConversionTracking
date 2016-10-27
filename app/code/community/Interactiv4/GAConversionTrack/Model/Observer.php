@@ -31,7 +31,7 @@ class Interactiv4_GAConversionTrack_Model_Observer
             $qty = 0;
             $isRFQS = false;
             foreach ($order->getAllVisibleItems() as $item) {
-            	if (!in_array($item->getSku(), array('RF_QS', 'RF_QSNAS')) {
+            	if (!in_array($item->getSku(), array('RF_QS', 'RF_QSNAS'))) {
             		continue;
             	}
             	$isRFQS = true;
