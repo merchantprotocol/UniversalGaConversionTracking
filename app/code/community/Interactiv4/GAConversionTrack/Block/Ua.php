@@ -92,7 +92,7 @@ class Interactiv4_GAConversionTrack_Block_Ua extends Mage_Core_Block_Template
     public function getAccountParams()
     {
         if (Mage::getIsDeveloperMode()) {
-            return Mage::helper('core')->jsonEncode(['cookieDomain' => 'none']);
+            return Mage::helper('core')->jsonEncode(array('cookieDomain' => 'none'));
         }
         return "'auto'";
     }
