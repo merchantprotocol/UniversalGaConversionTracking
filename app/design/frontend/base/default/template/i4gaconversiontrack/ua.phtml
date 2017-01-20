@@ -31,9 +31,19 @@
     })(window,document,'script','//www.google-analytics.com/analytics.js','__gaTracker');
 
     __gaTracker('create', '<?php echo $accountId ?>', <?php echo $this->getAccountParams() ?>);
+    __gaTracker('require', 'ec');
+    
+    <?php if (Mage::registry('current_product')) : ?>
+        __gaTracker('ec:addProduct', {
+        	  'id'     : '<?php echo Mage::registry('current_product')->getId() ?>',
+        	  'name'   : '<?php echo Mage::registry('current_product')->getName() ?>',
+              'price'  : '<?php echo Mage::registry('current_product')->getPrice() ?>'
+        	});
+        __gaTracker('ec:setAction', 'detail');
+    <?php endif ?>
+    
     __gaTracker('send', 'pageview');
-    <?php echo $this->_getOrdersTrackingCode() ?>
-
+    <?php //echo $this->_getOrdersTrackingCode() ?>
 //]]>
 </script>
 <!-- END GOOGLE UNIVERSAL ANALYTICS CODEs -->
