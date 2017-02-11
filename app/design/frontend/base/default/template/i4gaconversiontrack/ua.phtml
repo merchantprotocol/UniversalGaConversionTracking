@@ -18,33 +18,52 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  * @var $this Interactiv4_GAConversionTrack_Block_Ua
  */
+$h = Mage::helper('rf_subscribe/metrics');
+if ($h->isBot()):
+	$h->setBotCookie();
+else:
 ?>
-<?php $accountId = Mage::helper('i4gaconversiontrack')->getAccount(); ?>
-<?php if ($accountId):?>
-<!-- BEGIN GOOGLE UNIVERSAL ANALYTICS CODEs -->
-<script type="text/javascript">
-//<![CDATA[
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function()
-    { (i[r].q=i[r].q||[]).push(arguments)}
-        ,i[r].l=1*new Date();a=s.createElement(o),
-        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','//www.google-analytics.com/analytics.js','__gaTracker');
+    <?php $accountId = Mage::helper('i4gaconversiontrack')->getAccount(); ?>
+    <?php if ($accountId):?>
+    <!-- BEGIN GOOGLE UNIVERSAL ANALYTICS CODEs -->
+    <script type="text/javascript">
+    //<![CDATA[
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function()
+        { (i[r].q=i[r].q||[]).push(arguments)}
+            ,i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','__gaTracker');
+    
+        __gaTracker('create', '<?php echo $accountId ?>', <?php echo $this->getAccountParams() ?>);
+        __gaTracker('require', 'ec');
+        
+        <?php if (Mage::registry('current_product')) : ?>
+            __gaTracker('ec:addProduct', {
+            	  'id'     : '<?php echo Mage::registry('current_product')->getId() ?>',
+            	  'name'   : '<?php echo Mage::registry('current_product')->getName() ?>',
+                  'price'  : '<?php echo Mage::registry('current_product')->getPrice() ?>'
+            	});
+            __gaTracker('ec:setAction', 'detail');
+        <?php endif ?>
+        
+        __gaTracker('send', 'pageview');
+        <?php //echo $this->_getOrdersTrackingCode() ?>
+    //]]>
+    </script>
+    <!-- END GOOGLE UNIVERSAL ANALYTICS CODEs -->
+    <?php endif; ?>
 
-    __gaTracker('create', '<?php echo $accountId ?>', <?php echo $this->getAccountParams() ?>);
-    __gaTracker('require', 'ec');
-    
-    <?php if (Mage::registry('current_product')) : ?>
-        __gaTracker('ec:addProduct', {
-        	  'id'     : '<?php echo Mage::registry('current_product')->getId() ?>',
-        	  'name'   : '<?php echo Mage::registry('current_product')->getName() ?>',
-              'price'  : '<?php echo Mage::registry('current_product')->getPrice() ?>'
-        	});
-        __gaTracker('ec:setAction', 'detail');
-    <?php endif ?>
-    
-    __gaTracker('send', 'pageview');
-    <?php //echo $this->_getOrdersTrackingCode() ?>
-//]]>
-</script>
-<!-- END GOOGLE UNIVERSAL ANALYTICS CODEs -->
+	<script type="text/javascript">var _kmq = _kmq || [];
+	var _kmk = _kmk || '208767706627e7fe8616e051213653655c97e966';
+	function _kms(u){
+	 setTimeout(function(){
+	   var d = document, f = d.getElementsByTagName('script')[0],
+	   s = d.createElement('script');
+	   s.type = 'text/javascript'; s.async = true; s.src = u;
+	   f.parentNode.insertBefore(s, f);
+	 }, 1);
+	}
+	_kms('//i.kissmetrics.com/i.js');
+	_kms('//scripts.kissmetrics.com/' + _kmk + '.2.js');
+	</script>
 <?php endif; ?>
