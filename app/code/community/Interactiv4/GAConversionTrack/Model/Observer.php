@@ -10,6 +10,7 @@ class Interactiv4_GAConversionTrack_Model_Observer
 {
     public function track($observer) {
         $order = $observer->getEvent()->getOrder();
+        if (!Mage::app()->getStore()->isAdmin()) return;
 
         if (Mage::helper('i4gaconversiontrack')->isAvailable($order->getStoreId())
             && !$order->getData('i4gaconversiontrack_tracked')
