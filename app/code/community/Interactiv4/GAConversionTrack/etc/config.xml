@@ -102,6 +102,7 @@
             <general>
                 <page_title>Checkout success</page_title>
                 <page_url>/checkout/onepage/success</page_url>
+                <product_whitelist>RF_QS,RF_QSNAS</product_whitelist>
             </general>
             <social>
                 <fb_like>1</fb_like>

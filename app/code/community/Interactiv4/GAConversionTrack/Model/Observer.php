@@ -30,14 +30,14 @@ class Interactiv4_GAConversionTrack_Model_Observer
             $domain = parse_url($store->getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB), PHP_URL_HOST);
 
             $qty = 0;
-            $isRFQS = false;
+            $isAvailable = false;
             foreach ($order->getAllVisibleItems() as $item) {
-            	if (!in_array($item->getSku(),array('RF_QS','RF_QSNAS'))) {
+            	if (!in_array($item->getSku(), Mage::helper('i4gaconversiontrack')->getProductWhitelist())) {
             		continue;
             	}
-            	$isRFQS = true;
+                $isAvailable = true;
             }
-            if (!$isRFQS) {
+            if (!$isAvailable) {
             	$order->setData('i4gaconversiontrack_tracked', 1);
             	$order->save();
             	return;
