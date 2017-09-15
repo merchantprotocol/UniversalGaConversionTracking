@@ -96,4 +96,18 @@ class Interactiv4_GAConversionTrack_Block_Ua extends Mage_Core_Block_Template
         }
         return "'auto'";
     }
+
+    /**
+     * Prepare block to HTML
+     *
+     * @return string
+     */
+    protected function _toHtml()
+    {
+        if (!Mage::helper('i4gaconversiontrack')->isAvailable()) {
+            return '';
+        }
+
+        return parent::_toHtml();
+    }
 }
