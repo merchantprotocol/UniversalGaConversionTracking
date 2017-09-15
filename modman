@@ -1,3 +1,4 @@
+i4gaconversiontrack_analytics.php i4gaconversiontrack_analytics.php
 app/design/frontend/base/default/layout/i4gaconversiontrack.xml app/design/frontend/base/default/layout/i4gaconversiontrack.xml
 app/design/frontend/base/default/template/i4gaconversiontrack/social_interactions.phtml app/design/frontend/base/default/template/i4gaconversiontrack/social_interactions.phtml
 app/design/frontend/base/default/template/i4gaconversiontrack/visitant.phtml app/design/frontend/base/default/template/i4gaconversiontrack/visitant.phtml
