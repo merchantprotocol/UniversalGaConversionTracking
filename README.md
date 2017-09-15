@@ -84,6 +84,8 @@ You can install the extension using three methods:
 
 - Just download the zip file from repository and unzip in the correct path in your Magento instance.
 
+- Put this line on .htaccess file: RewriteRule ^js/i4gaconversiontrack/analytics.js /i4gaconversiontrack_analytics.php [NC,L]
+
 **Admin section ScreenShoot**
 
 1. Select the statuses / status of the orders you want to track.
