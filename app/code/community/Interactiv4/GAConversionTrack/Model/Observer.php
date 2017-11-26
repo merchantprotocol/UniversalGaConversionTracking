@@ -15,6 +15,7 @@ class Interactiv4_GAConversionTrack_Model_Observer
         if (Mage::helper('i4gaconversiontrack')->isAvailable($order->getStoreId())
             && !$order->getData('i4gaconversiontrack_tracked')
         ) {
+            
             $statusesToTrack = Mage::helper('i4gaconversiontrack')->getStatusesToTrack($order->getStoreId());
             $pass = false;
             foreach($statusesToTrack as $statusToTrack) {
@@ -25,6 +26,7 @@ class Interactiv4_GAConversionTrack_Model_Observer
                     $pass = true; // if any of the state/status combination matches, pass it through
                 }
             }
+
             if (!$pass) return;
             $store = Mage::app()->getStore($order->getStoreId());
             $domain = parse_url($store->getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB), PHP_URL_HOST);
@@ -32,13 +34,14 @@ class Interactiv4_GAConversionTrack_Model_Observer
             $qty = 0;
             $isAvailable = false;
             foreach ($order->getAllVisibleItems() as $item) {
-            	if (!in_array($item->getSku(), Mage::helper('i4gaconversiontrack')->getProductWhitelist())) {
+            	if (!in_array($item->getSku(), Mage::helper('i4gaconversiontrack')->getProductWhitelist($order->getStoreId()))) {
             		continue;
             	}
                 $isAvailable = true;
             }
             if (!$isAvailable) {
-            	$order->setData('i4gaconversiontrack_tracked', 1);
+                $i4gaconversiontrack_tracked = $order->getData('i4gaconversiontrack_tracked') ?: 0;
+            	$order->setData('i4gaconversiontrack_tracked', ++$i4gaconversiontrack_tracked);
             	$order->save();
             	return;
             }

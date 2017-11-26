@@ -96,6 +96,15 @@
                 </i4gaconversiontrack>
             </updates>
         </layout>
+        <routers>
+            <i4gaconversiontrack>
+                <use>standard</use>
+                <args>
+                    <module>Interactiv4_GAConversionTrack</module>
+                    <frontName>ga</frontName>
+                </args>
+            </i4gaconversiontrack>
+        </routers>
     </frontend>
     <default>
         <i4gaconversiontrack>

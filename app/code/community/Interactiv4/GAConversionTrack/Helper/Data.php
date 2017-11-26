@@ -11,7 +11,7 @@ class Interactiv4_GAConversionTrack_Helper_Data extends Mage_Core_Helper_Abstrac
     const XML_PATH_ACTIVE = 'i4gaconversiontrack/general/active';
     const XML_PATH_ORDER_STATUS = 'i4gaconversiontrack/general/order_status';
     const XML_PATH_ACCOUNT = 'google/analytics/account';
-    const XML_PATH_PRODUCT_WHITELIST = 'google/general/product_whitelist';
+    const XML_PATH_PRODUCT_WHITELIST = 'i4gaconversiontrack/general/product_whitelist';
 
     public function isAvailable($store = null) {
         $isActive = Mage::getStoreConfigFlag(self::XML_PATH_ACTIVE, $store);
@@ -39,8 +39,8 @@ class Interactiv4_GAConversionTrack_Helper_Data extends Mage_Core_Helper_Abstrac
      *
      * @return array
      */
-    public function getProductWhitelist()
+    public function getProductWhitelist( $storeId = 1 )
     {
-        return explode(',', Mage::getStoreConfig(self::XML_PATH_PRODUCT_WHITELIST));
+        return explode(',', Mage::getStoreConfig(self::XML_PATH_PRODUCT_WHITELIST, $storeId));
     }
 }
