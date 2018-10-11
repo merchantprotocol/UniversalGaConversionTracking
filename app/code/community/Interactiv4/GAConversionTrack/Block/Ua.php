@@ -32,50 +32,25 @@ class Interactiv4_GAConversionTrack_Block_Ua extends Mage_Core_Block_Template
         if (empty($orderIds) || !is_array($orderIds)) {
             return;
         }
-        $collection = Mage::getResourceModel('sales/order_collection')
+        $collection = Mage::getResourceModel($this->jsQuoteEscape('sales/order_collection'))
             ->addFieldToFilter('entity_id', array('in' => $orderIds));
         $result = array();
 
-        /* Require eccomerce script */
-
-        $result[] = "__gaTracker('require', 'ecommerce', 'ecommerce.js');";
-
+        /** @var Mage_Sales_Model_Order $order */
         foreach ($collection as $order) {
-            if ($order->getIsVirtual()) {
-                $address = $order->getBillingAddress();
-            } else {
-                $address = $order->getShippingAddress();
-            }
+            $itemsData = [];
 
-            /* Add order information */
-
-            $result[] = sprintf(
-                "__gaTracker('ecommerce:addTransaction', {
-                'id': '%s',
-                'affiliation': '%s',
-                'revenue': '%s',
-                'shipping': '%s',
-                'tax': '%s'
-            });",
-                $order->getIncrementId(),
-                $this->jsQuoteEscape(Mage::app()->getStore()->getFrontendName()),
-                $order->getBaseGrandTotal(),
-                $order->getBaseShippingAmount(),
-                $order->getBaseTaxAmount()
-            );
-
-            /* Add pusrchased items info */
-
+            /** @var Mage_Sales_Model_Order_Item $item */
             foreach ($order->getAllVisibleItems() as $item) {
-                $result[] = sprintf(
-                    "__gaTracker('ecommerce:addItem', {
+                $itemsData[] = sprintf(
+                    "{
                     'id': '%s',
                     'name': '%s',
                     'sku': '%s',
                     'category': '%s',
                     'price': '%s',
                     'quantity': '%s'
-                });",
+                }",
                     $order->getIncrementId(),
                     $this->jsQuoteEscape($item->getName()),
                     $this->jsQuoteEscape($item->getSku()),
@@ -84,17 +59,38 @@ class Interactiv4_GAConversionTrack_Block_Ua extends Mage_Core_Block_Template
                     intval($item->getQtyOrdered())
                 );
             }
-            $result[] = "__gaTracker('ecommerce:send');";
+
+            $result[] = sprintf(
+                "gtag('event', 'purchase', {
+                'transaction_id': '%s',
+                'affiliation': '%s',
+                'value': '%s',
+                'currency': '%s',
+                'tax': '%s',
+                'shipping': '%s',
+                'items': [%s]
+            });",
+                $order->getIncrementId(),
+                $this->jsQuoteEscape($order->getStore()->getFrontendName()),
+                $order->getBaseGrandTotal(),
+                $order->getOrderCurrencyCode(),
+                $order->getBaseTaxAmount(),
+                $order->getBaseShippingAmount(),
+                implode(',', $itemsData)
+            );
         }
-        return implode("\n", $result);
+        return implode("n", $result);
     }
 
     public function getAccountParams()
     {
+        $params = [];
+
         if (Mage::getIsDeveloperMode()) {
-            return Mage::helper('core')->jsonEncode(array('cookieDomain' => 'none'));
+            $params = ['cookie_domain' => 'none'];
         }
-        return "'auto'";
+
+        return Mage::helper('core')->jsonEncode($params);
     }
 
     /**

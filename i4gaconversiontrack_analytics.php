@@ -6,10 +6,12 @@ umask(0);
 
 Mage::app();
 
-$client = new Zend_Http_Client('http://www.google-analytics.com/analytics.js', ['timeout' => 30]);
-$client->setMethod(Zend_Http_Client::GET);
+$trackingId = Mage::helper('i4gaconversiontrack')->getAccount();
+$client     = new Zend_Http_Client('http://www.googletagmanager.com/gtag/js?id=' . $trackingId, ['timeout' => 30]);
 
 try {
+    $client->setMethod(Zend_Http_Client::GET);
+
     $response     = $client->request();
     $responseBody = $response->getBody();
 
