@@ -25,8 +25,15 @@
 <?php else : ?>
     <?php $accountId = Mage::helper('i4gaconversiontrack')->getAccount() ?>
     <?php if ($accountId) : ?>
-        <!-- BEGIN GOOGLE GLOBAL SITE TAG CODEs -->
-        <script async src="http://www.googletagmanager.com/gtag/js?id=<?= $accountId ?>"></script>
+        <!-- BEGIN GOOGLE GLOBAL SITE TAG CODEs 
+        <script async src="//www.googletagmanager.com/gtag/js?id=<?= $accountId ?>"></script>
+	-->
+
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NFH3JTT"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
         <script>
         //<![CDATA[
             window.dataLayer = window.dataLayer || [];
