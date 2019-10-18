@@ -142,6 +142,14 @@
                             <show_in_store>1</show_in_store>
                             <config_path>google/analytics/active</config_path>
                         </active>
+                        <gtm_id translate="label">
+                            <label>Google Tag Manager Id</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </gtm_id>
                         <account_id translate="label">
                             <label>Account Id</label>
                             <frontend_type>text</frontend_type>
