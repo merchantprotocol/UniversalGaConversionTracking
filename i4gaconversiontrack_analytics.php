@@ -7,7 +7,7 @@ umask(0);
 Mage::app();
 
 $trackingId = Mage::helper('i4gaconversiontrack')->getAccount();
-$client     = new Zend_Http_Client('http://www.googletagmanager.com/gtag/js?id=' . $trackingId, ['timeout' => 30]);
+$client     = new Zend_Http_Client('https://www.googletagmanager.com/gtag/js?id=' . $trackingId, ['timeout' => 30]);
 
 try {
     $client->setMethod(Zend_Http_Client::GET);
